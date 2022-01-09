@@ -17,7 +17,12 @@ public class SqlSanitizer implements ISanitizer {
 
 	@Override
 	public String escapeContent(final String sql) {
-		return needToEscapeSql(sql) ? sanitizeSql(sql) : sql;
+		final StringBuilder sb = new StringBuilder(needToEscapeSql(sql) ? sanitizeSql(sql) : sql);
+
+		sb.insert(0, "'");
+		sb.insert(sb.length(), "'");
+
+		return sb.toString();
 	}
 
 	private boolean needToEscapeSql(final String sql) {
@@ -26,12 +31,7 @@ public class SqlSanitizer implements ISanitizer {
 	}
 
 	private String sanitizeSql(final String sql) {
-		final StringBuilder sb = new StringBuilder(sql.replaceAll("'", "\\\\'"));
-
-		sb.insert(0, "'");
-		sb.insert(sb.length(), "'");
-
-		return sb.toString();
+		return sql.replaceAll("'", "\\\\'");
 	}
 
 }

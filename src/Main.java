@@ -8,7 +8,7 @@ public class Main {
 		final SqlSanitizer sqlSanitizer = SqlSanitizer.getInstance();
 
 		System.out.println(htmlSanitizer.escapeContent("<script>alert(\"xss\");</script>"));
-		System.out.println(sqlSanitizer.escapeContent("' OR 1=1; DROP DATABASE;"));
+		System.out.println(sqlSanitizer.escapeContent("1 OR 1=1; DROP DATABASE;"));
 	}
 
 }
