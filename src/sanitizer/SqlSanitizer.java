@@ -1,5 +1,7 @@
 package sanitizer;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,6 +25,24 @@ public class SqlSanitizer implements ISanitizer {
 		sb.insert(sb.length(), "'");
 
 		return sb.toString();
+	}
+
+	@Override
+	public List<Integer> scanContent(final String sql, final Pattern pattern) {
+		if (sql.charAt(0) == '\'' && sql.charAt(sql.length() - 1) == '\'') {
+			return new ArrayList<>();
+		}
+
+		final List<Integer> indexes = new ArrayList<>();
+		final char [] content = sql.toCharArray();
+
+		for (int i = 0; i < content.length; i++) {
+			if (pattern.matcher(String.valueOf(content[i])).find()) {
+				indexes.add(i);
+			}
+		}
+
+		return indexes;
 	}
 
 	private boolean needToEscapeSql(final String sql) {
